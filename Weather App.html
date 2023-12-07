@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!-- saved from url=(0076)file:///C:/Users/Anandha%20Nivas/OneDrive/Desktop/bharat%20intern/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+            body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+        }
+
+        .weather-card {
+            width: 300px;
+            height: 350px;
+            background-color: grey;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .weather-card h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .weather-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .weather-card .info {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 20px;
+            color:whitesmoke;
+        }
+
+        .weather-card .info div {
+            text-align: center;
+            color: white;
+        }
+
+        .weather-card .info p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="weather-card">
+        <h1 id="city-name"></h1>
+        <img id="weather-icon" src="file:///C:/Users/Anandha%20Nivas/OneDrive/Desktop/bharat%20intern/index.html" alt="Weather Icon">
+        <div class="info">
+            <div>
+                <p>Temperature</p>
+                <p id="temp"></p>
+            </div>
+            <div>
+                <p>Humidity</p>
+                <p id="humidity"></p>
+            </div>
+            <div>
+                <p>Wind Speed</p>
+                <p id="wind-speed"></p>
+            </div>
+        </div>
+    </div>
+
+    <input type="text" id="city-input" placeholder="Enter city">
+    <button id="search-btn">Search</button>
+
+    <script>
+        const apiKey = 'd5ff0551664b07ba689a3eecc6286ba2';
+        let city = '';
+
+        document.getElementById('search-btn').addEventListener('click', () => {
+            city = document.getElementById('city-input').value;
+
+            if (!city) {
+                alert('Please enter a city');
+                return;
+            }
+
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    const { name } = data;
+                    const { icon, description } = data.weather[0];
+                    const { temp, humidity } = data.main;
+                    const { speed } = data.wind;
+
+                    // Display Data
+                    document.getElementById('city-name').textContent = name;
+                    document.getElementById('weather-icon').src = `http://openweathermap.org/img/wn/${icon}@2x.png`;
+                    document.getElementById('temp').textContent = Math.round(temp - 273.15) + '°C';
+                    document.getElementById('humidity').textContent = humidity + '%';
+                    document.getElementById('wind-speed').textContent = speed + 'm/s';
+                })
+                .catch(error => console.log(error));
+        });
+    </script>
+
+</body></html>
